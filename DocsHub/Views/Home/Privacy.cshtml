@@ -1,0 +1,57 @@
+﻿@{
+    ViewData["Title"] = "Код процедуры на plpgsql";
+}
+<h1>@ViewData["Title"]</h1>
+
+
+	<p>-- DROP PROCEDURE public.prices_sum(xml);</p>
+
+<p>
+	CREATE OR REPLACE PROCEDURE public.prices_sum(IN xml_document xml)
+</p>
+<p>
+	LANGUAGE plpgsql
+</p>
+<p>
+	AS $procedure$
+</p>
+<p>
+	declare
+</p>
+<p>
+	result numeric := 0;
+</p>
+<p>
+	item_price text;
+</p>
+<p>
+	first_id integer;
+</p>
+<p>
+	BEGIN
+</p>
+<p>
+	for item_price in select unnest(xpath('/Contract/Items/Item/Price/text()', xml_document))::text loop
+</p>
+<p>
+	result := result + item_price::numeric;
+</p>
+<p>
+	end loop;
+</p>
+<p>
+	select "Id" INTO first_id FROM docs LIMIT 1;
+</p>
+<p>
+	UPDATE docs SET "TotalPrice" = result WHERE "Id" = first_id;
+</p>
+<p>
+	UPDATE docs SET "TotalPrice" = 0 where "Id" <> first_id;
+</p>
+<p>
+	END;
+</p>
+<p>
+	$procedure$;
+</p>
+

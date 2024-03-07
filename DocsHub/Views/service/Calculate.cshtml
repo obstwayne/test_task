@@ -1,0 +1,25 @@
+﻿@model IEnumerable<DocsHub.Models.docs>
+@{
+    ViewData["Title"] = "Результат";
+}
+<h1>@ViewData["Title"]</h1>
+<table class="table">
+    <thead>
+        <tr>
+            <th>
+                Итоговая сумма цен:
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        
+            <tr>
+                <td>
+                    @Html.DisplayFor(model => model.FirstOrDefault().TotalPrice)
+                </td>
+            </tr>
+        
+    </tbody>
+</table>
+
